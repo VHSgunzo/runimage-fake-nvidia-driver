@@ -1,6 +1,7 @@
 #!/bin/bash
 
 try_dl() {
+     echo "= download $1"
      if which aria2c &>/dev/null
           then
                aria2c --allow-overwrite -o "$1" -d "$(dirname "$1")" "$2"
@@ -23,8 +24,11 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
    try_dl "nvidia-utils.tar.zst" "https://archlinux.org/packages/extra/x86_64/nvidia-utils/download"
    then
        mkdir nvidia-utils 2>/dev/null
+       echo "= unpack lib32-nvidia-utils.tar.zst"
        tar -xf lib32-nvidia-utils.tar.zst -C nvidia-utils
+       echo "= unpack nvidia-utils.tar.zst"
        tar -xf nvidia-utils.tar.zst -C nvidia-utils
+       echo "= create fake nvidia-utils"
        (cd nvidia-utils
        rm -rf ./.* usr/bin usr/share/doc usr/share/man \
               usr/share/licenses 2>/dev/null
@@ -50,9 +54,14 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        mkdir -p usr/lib/nvidia/64
        #mkdir -p etc/ld.so.conf.d
        #echo -e "/usr/lib/nvidia/64\n/usr/lib/nvidia/32" > etc/ld.so.conf.d/nvidia.conf
-       tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr etc)
+       #tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr etc)
+       echo "= create fake-nvidia-utils.tar.gz"
+       tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr)
+       echo "= update tar.gz checksum"
        updpkgsums
+       echo "= create archlinux package"
        makepkg -s
+       echo "= cleanup"
        rm -rf lib32-nvidia-utils.tar.zst nvidia-utils.tar.zst \
               nvidia-utils pkg src 2>/dev/null
    else
