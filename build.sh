@@ -16,6 +16,7 @@ try_dl() {
      fi
 }
 
+cd "$(dirname "$(readlink -f "$0" 2>/dev/null)" 2>/dev/null)"
 rm -rf nvidia-utils.tar.zst fake-nvidia-utils* \
        lib32-nvidia-utils.tar.zst 2>/dev/null
 if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/x86_64/lib32-nvidia-utils/download" && \

@@ -18,7 +18,6 @@ jobs:
         uses: countstarlight/arch-makepkg-action@master
         with:
           packages: >
-            base-devel
             pacman-contrib
             aria2
           scripts: "./build.sh"
