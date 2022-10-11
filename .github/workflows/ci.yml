@@ -17,6 +17,10 @@ jobs:
       - name: Build archlinux package
         uses: countstarlight/arch-makepkg-action@master
         with:
+          packages: >
+            base-devel
+            pacman-contrib
+            aria2
           scripts: "./build.sh"
       - name: Release
         uses: softprops/action-gh-release@v1
