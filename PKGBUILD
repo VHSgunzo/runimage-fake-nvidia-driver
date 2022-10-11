@@ -11,7 +11,7 @@ license=('MIT')
 conflicts=('lib32-nvidia-utils' 'nvidia-utils')
 provides=('lib32-nvidia-utils' 'nvidia-utils')
 source=('fake-nvidia-utils.tar.gz')
-sha256sums=('c0b15b37cbe7433de2e91df3ffd83b420d97fef6a18895259c00c6cf4659a784')
+sha256sums=('8c95c8fb96c10af0a6068ecdcf3a8c1e10e07b95c509488a451547d6dd3ff886')
 
 package() {
   cp -rf usr "${pkgdir}/"
