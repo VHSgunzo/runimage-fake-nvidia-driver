@@ -52,11 +52,11 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        mkdir -p usr/bin/nvidia
        mkdir -p usr/lib/nvidia/32
        mkdir -p usr/lib/nvidia/64
-       #mkdir -p etc/ld.so.conf.d
-       #echo -e "/usr/lib/nvidia/64\n/usr/lib/nvidia/32" > etc/ld.so.conf.d/nvidia.conf
-       #tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr etc)
+       mkdir -p etc/ld.so.conf.d
+       echo -e "/usr/lib/nvidia/64\n/usr/lib/nvidia/32" > etc/ld.so.conf.d/nvidia.conf
        echo "= create fake-nvidia-utils.tar.gz"
-       tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr)
+       tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr etc)
+       #tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr)
        echo "= update tar.gz checksum"
        updpkgsums
        echo "= create archlinux package"

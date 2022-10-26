@@ -1,7 +1,7 @@
 # Maintainer: VHSgunzo <vhsgunzo.github.io>
 
 pkgname='fake-nvidia-utils'
-pkgver='0.2'
+pkgver='0.3'
 pkgrel='1'
 pkgbase="$pkgname"
 pkgdesc='Fake nvidia-utils for Bubblewrap RO container binding'
@@ -11,9 +11,9 @@ license=('MIT')
 conflicts=('lib32-nvidia-utils' 'nvidia-utils')
 provides=('lib32-nvidia-utils' 'nvidia-utils')
 source=('fake-nvidia-utils.tar.gz')
-sha256sums=('8c95c8fb96c10af0a6068ecdcf3a8c1e10e07b95c509488a451547d6dd3ff886')
+sha256sums=('344fe786554f562553c3786ce112ee5e1fc9e5f55f97787865b2c297a872db53')
 
 package() {
   cp -rf usr "${pkgdir}/"
-  #cp -rf etc "${pkgdir}/"
+  cp -rf etc "${pkgdir}/"
 }
