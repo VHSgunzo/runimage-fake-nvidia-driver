@@ -18,8 +18,7 @@ try_dl() {
 }
 
 cd "$(dirname "$(readlink -f "$0" 2>/dev/null)" 2>/dev/null)"
-rm -rf nvidia-utils.tar.zst fake-nvidia-utils* \
-       lib32-nvidia-utils.tar.zst 2>/dev/null
+rm -rf *nvidia-utils* pkg src 2>/dev/null
 if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/x86_64/lib32-nvidia-utils/download" && \
    try_dl "nvidia-utils.tar.zst" "https://archlinux.org/packages/extra/x86_64/nvidia-utils/download"
    then
@@ -35,19 +34,19 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        nvidia_version="$(basename usr/lib/libGLX_nvidia.so.*.*|tail -c +18)"
        mv "usr/lib/firmware/nvidia/$nvidia_version" "usr/lib/firmware/nvidia/000.00.00"
        all_links="$(find ~+ -type l -print 2>/dev/null|sed "s|$(pwd)/||g")"
-       all_files="$(find ~+ -type f -print 2>/dev/null|sed "s|$(pwd)/||g")"
+       all_files="$(find ~+ -type f -print 2>/dev/null|sed "s|$(pwd)/||g"|grep -v 'nvidia-drm-outputclass.conf')"
        for link in $all_links
-       do
-              (link_to="$(file "$link"|sed 's|.*link to ||')"
-              cd "$(dirname "$link")"
-              [ -n "$(echo "$link_to"|grep -o "$nvidia_version")" ] && \
-                     ln -sf "$(echo "$link_to"|sed "s|$nvidia_version|000.00.00|g")" "$(basename "$link")")
+          do
+               (link_to="$(file "$link"|sed 's|.*link to ||')"
+               cd "$(dirname "$link")"
+               [ -n "$(echo "$link_to"|grep -o "$nvidia_version")" ] && \
+                    ln -sf "$(echo "$link_to"|sed "s|$nvidia_version|000.00.00|g")" "$(basename "$link")")
        done
        for file in $all_files
-       do
-              truncate -s0 "$file"
-              [ -n "$(echo "$file"|grep -o "$nvidia_version")" ] && \
-                     mv -f "$file" "$(echo "$file"|sed "s|$nvidia_version|000.00.00|g")"
+          do
+               truncate -s0 "$file"
+               [ -n "$(echo "$file"|grep -o "$nvidia_version")" ] && \
+                    mv -f "$file" "$(echo "$file"|sed "s|$nvidia_version|000.00.00|g")"
        done
        mkdir -p usr/bin/nvidia
        mkdir -p usr/lib/nvidia/32
