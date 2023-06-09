@@ -1,5 +1,5 @@
 # runimage-fake-nvidia-utils
-* Fake nvidia-utils for Bubblewrap RO container binding
+* Fake nvidia-utils for RunImage container
 ## To get started:
 * **Download the latest revision**
 ```
