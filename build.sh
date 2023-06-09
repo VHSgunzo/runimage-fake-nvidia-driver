@@ -29,8 +29,7 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        tar -xf nvidia-utils.tar.zst -C nvidia-utils
        echo "= create fake nvidia-utils"
        (cd nvidia-utils
-       rm -rf ./.* usr/bin usr/share/doc usr/share/man \
-              usr/share/licenses 2>/dev/null
+       rm -rf ./.* usr/bin usr/share/doc usr/share/man usr/share/licenses 2>/dev/null
        nvidia_version="$(basename usr/lib/libGLX_nvidia.so.*.*|tail -c +18)"
        mv "usr/lib/firmware/nvidia/$nvidia_version" "usr/lib/firmware/nvidia/000.00.00"
        all_links="$(find ~+ -type l -print 2>/dev/null|sed "s|$(pwd)/||g")"
@@ -48,6 +47,10 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
                [ -n "$(echo "$file"|grep -o "$nvidia_version")" ] && \
                     mv -f "$file" "$(echo "$file"|sed "s|$nvidia_version|000.00.00|g")"
        done
+       [ ! -f "usr/lib/libnvidia-pkcs11.so.000.00.00" ] && \
+          touch "usr/lib/libnvidia-pkcs11.so.000.00.00"
+       [ ! -f "usr/lib/libnvidia-pkcs11-openssl3.so.000.00.00" ] && \
+          touch "usr/lib/libnvidia-pkcs11-openssl3.so.000.00.00"
        mkdir -p usr/bin/nvidia
        mkdir -p usr/lib/nvidia/32
        mkdir -p usr/lib/nvidia/64
@@ -55,9 +58,6 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        echo -e "/usr/lib/nvidia/64\n/usr/lib/nvidia/32" > etc/ld.so.conf.d/nvidia.conf
        echo "= create fake-nvidia-utils.tar.gz"
        tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr etc)
-       #tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr)
-       echo "= update tar.gz checksum"
-       updpkgsums
        echo "= create archlinux package"
        makepkg -s
        echo "= cleanup"

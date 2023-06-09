@@ -1,0 +1,15 @@
+pkgbase = fake-nvidia-utils
+	pkgdesc = Fake nvidia-utils for RunImage container
+	pkgver = 0.5
+	pkgrel = 1
+	url = https://github.com/VHSgunzo/runimage-fake-nvidia-utils
+	arch = x86_64
+	license = MIT
+	provides = lib32-nvidia-utils
+	provides = nvidia-utils
+	conflicts = lib32-nvidia-utils
+	conflicts = nvidia-utils
+	source = fake-nvidia-utils.tar.gz
+	sha256sums = SKIP
+
+pkgname = fake-nvidia-utils
