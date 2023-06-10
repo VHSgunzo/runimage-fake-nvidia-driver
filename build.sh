@@ -49,10 +49,17 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
                [ -n "$(echo "$file"|grep -o "$nvidia_version")" ] && \
                     mv -f "$file" "$(echo "$file"|sed "s|$nvidia_version|000.00.00|g")"
        done
-       [ ! -f "usr/lib/libnvidia-pkcs11.so.000.00.00" ] && \
-          touch "usr/lib/libnvidia-pkcs11.so.000.00.00"
-       [ ! -f "usr/lib/libnvidia-pkcs11-openssl3.so.000.00.00" ] && \
-          touch "usr/lib/libnvidia-pkcs11-openssl3.so.000.00.00"
+       for lib in libnvidia-pkcs11 libnvidia-pkcs11-openssl3
+          do
+               if [ ! -f "usr/lib/$lib.so.000.00.00" ]
+                    then
+                         (cd usr/lib
+                         touch "$lib.so.000.00.00"
+                         chmod +x "$lib.so.000.00.00"
+                         ln -sf "$lib.so.000.00.00" "$lib.so.1"
+                         ln -sf "$lib.so.1" "$lib.so")
+               fi
+       done
        mkdir -p usr/bin/nvidia
        mkdir -p usr/lib/nvidia/32
        mkdir -p usr/lib/nvidia/64
