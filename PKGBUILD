@@ -1,7 +1,7 @@
 # Maintainer: VHSgunzo <vhsgunzo.github.io>
 
 pkgname='fake-nvidia-utils'
-pkgver='0.5'
+pkgver='0.6'
 pkgrel='1'
 pkgbase="$pkgname"
 pkgdesc='Fake nvidia-utils for RunImage container'

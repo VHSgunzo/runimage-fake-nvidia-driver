@@ -29,7 +29,9 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        tar -xf nvidia-utils.tar.zst -C nvidia-utils
        echo "= create fake nvidia-utils"
        (cd nvidia-utils
-       rm -rf ./.* usr/bin usr/share/doc usr/share/man usr/share/licenses 2>/dev/null
+       rm -rf ./.* usr/bin usr/share/doc usr/share/man usr/share/licenses \
+              usr/lib/sysusers.d usr/lib/systemd usr/lib/udev usr/lib/modprobe.d \
+              usr/lib/modules-load.d 2>/dev/null
        nvidia_version="$(basename usr/lib/libGLX_nvidia.so.*.*|tail -c +18)"
        mv "usr/lib/firmware/nvidia/$nvidia_version" "usr/lib/firmware/nvidia/000.00.00"
        all_links="$(find ~+ -type l -print 2>/dev/null|sed "s|$(pwd)/||g")"
