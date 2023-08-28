@@ -17,8 +17,19 @@ try_dl() {
      fi
 }
 
+create_fake_lib() {
+     if [ ! -f "usr/$1/$2.so.000.00.00" ]
+          then
+               (cd usr/$1
+               touch "$2.so.000.00.00"
+               chmod +x "$2.so.000.00.00"
+               ln -sf "$2.so.000.00.00" "$2.so.1"
+               ln -sf "$2.so.1" "$2.so")
+     fi
+}
+
 cd "$(dirname "$(readlink -f "$0" 2>/dev/null)" 2>/dev/null)"
-rm -rf *nvidia-utils* pkg src 2>/dev/null
+rm -rf *nvidia* pkg src 2>/dev/null
 if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/x86_64/lib32-nvidia-utils/download" && \
    try_dl "nvidia-utils.tar.zst" "https://archlinux.org/packages/extra/x86_64/nvidia-utils/download"
    then
@@ -27,7 +38,7 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        tar -xf lib32-nvidia-utils.tar.zst -C nvidia-utils
        echo "= unpack nvidia-utils.tar.zst"
        tar -xf nvidia-utils.tar.zst -C nvidia-utils
-       echo "= create fake nvidia-utils"
+       echo "= create fake nvidia-driver"
        (cd nvidia-utils
        rm -rf ./.* usr/bin usr/share/doc usr/share/man usr/share/licenses \
               usr/lib/sysusers.d usr/lib/systemd usr/lib/udev usr/lib/modprobe.d \
@@ -50,23 +61,20 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
                     mv -f "$file" "$(echo "$file"|sed "s|$nvidia_version|000.00.00|g")"
        done
        for lib in libnvidia-pkcs11 libnvidia-pkcs11-openssl3
-          do
-               if [ ! -f "usr/lib/$lib.so.000.00.00" ]
-                    then
-                         (cd usr/lib
-                         touch "$lib.so.000.00.00"
-                         chmod +x "$lib.so.000.00.00"
-                         ln -sf "$lib.so.000.00.00" "$lib.so.1"
-                         ln -sf "$lib.so.1" "$lib.so")
-               fi
+          do create_fake_lib lib $lib
+       done
+       for arch in lib lib32
+          do create_fake_lib $arch libnvidia-opencl
        done
        mkdir -p usr/bin/nvidia
        mkdir -p usr/lib/nvidia/32
        mkdir -p usr/lib/nvidia/64
        mkdir -p etc/ld.so.conf.d
+       mkdir -p etc/OpenCL/vendors
+       touch etc/OpenCL/vendors/nvidia.icd
        echo -e "/usr/lib/nvidia/64\n/usr/lib/nvidia/32" > etc/ld.so.conf.d/nvidia.conf
-       echo "= create fake-nvidia-utils.tar.gz"
-       tar --gzip -acf ../fake-nvidia-utils.tar.gz -C ./ usr etc)
+       echo "= create fake-nvidia-driver.tar.gz"
+       tar --gzip -acf ../fake-nvidia-driver.tar.gz -C ./ usr etc)
        echo "= create archlinux package"
        makepkg -s
        echo "= cleanup"

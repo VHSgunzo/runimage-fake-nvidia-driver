@@ -1,15 +1,20 @@
-pkgbase = fake-nvidia-utils
-	pkgdesc = Fake nvidia-utils for RunImage container
-	pkgver = 0.5
+pkgbase = fake-nvidia-driver
+	pkgdesc = Fake Nvidia driver for RunImage container
+	pkgver = 0.8
 	pkgrel = 1
-	url = https://github.com/VHSgunzo/runimage-fake-nvidia-utils
+	url = https://github.com/VHSgunzo/runimage-fake-nvidia-driver
 	arch = x86_64
 	license = MIT
 	provides = lib32-nvidia-utils
 	provides = nvidia-utils
+	provides = lib32-opencl-nvidia
+	provides = opencl-nvidia
+	provides = NVIDIA-MODULE
 	conflicts = lib32-nvidia-utils
 	conflicts = nvidia-utils
-	source = fake-nvidia-utils.tar.gz
+	conflicts = lib32-opencl-nvidia
+	conflicts = opencl-nvidia
+	source = fake-nvidia-driver.tar.gz
 	sha256sums = SKIP
 
-pkgname = fake-nvidia-utils
+pkgname = fake-nvidia-driver
