@@ -7,7 +7,7 @@ try_dl() {
                aria2c --allow-overwrite -o "$1" -d "$(dirname "$1")" "$2"
      elif which wget &>/dev/null
           then
-               wget -q --show-progress --no-check-certificate --content-disposition -t 3 -T 5 -w 0.5 \
+               wget -q --show-progress --no-check-certificate -t 3 -T 5 -w 0.5 \
                     "$2" -O "$(dirname "$1")/$1"
      elif which curl &>/dev/null
           then
@@ -73,8 +73,8 @@ if try_dl "lib32-nvidia-utils.tar.zst" "https://archlinux.org/packages/multilib/
        mkdir -p etc/OpenCL/vendors
        touch etc/OpenCL/vendors/nvidia.icd
        echo -e "/usr/lib/nvidia/64\n/usr/lib/nvidia/32" > etc/ld.so.conf.d/nvidia.conf
-       echo "= create fake-nvidia-driver.tar.gz"
-       tar --gzip -acf ../fake-nvidia-driver.tar.gz -C ./ usr etc)
+       echo "= create fake-nvidia-driver.tar"
+       tar -cf ../fake-nvidia-driver.tar -C ./ usr etc)
        echo "= create archlinux package"
        makepkg -s
        echo "= cleanup"
